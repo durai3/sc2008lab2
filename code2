@@ -1,0 +1,32 @@
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class Rfc865UdpClient {
+    public static void main(String[] args) {
+        try {
+            DatagramSocket socket = new DatagramSocket();
+            String requestStr = "YourName, YourLabGroup, YourClientIPAddress";
+            byte[] requestData = requestStr.getBytes();
+
+            InetAddress serverAddress = InetAddress.getByName("localhost"); // Change if needed
+            int serverPort = 17;
+
+            // 2. Send UDP request to server
+            DatagramPacket request = new DatagramPacket(requestData, requestData.length, serverAddress, serverPort);
+            socket.send(request);
+
+            // 3. Receive UDP reply from server
+            byte[] buffer = new byte;
+            DatagramPacket reply = new DatagramPacket(buffer, buffer.length);
+            socket.receive(reply);
+
+            String quote = new String(reply.getData(), 0, reply.getLength());
+            System.out.println("Quote of the Day: " + quote);
+
+            socket.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
