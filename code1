@@ -1,0 +1,34 @@
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+
+public class Rfc865UdpServer {
+    public static void main(String[] args) {
+        try {
+            // 1. Open UDP socket at port 17 (QOTD)
+            DatagramSocket socket = new DatagramSocket(17);
+            byte[] buffer = new byte; // Adjust size as needed
+
+            while (true) {
+                // 2. Listen for UDP request
+                DatagramPacket request = new DatagramPacket(buffer, buffer.length);
+                socket.receive(request);
+
+                // 3. Prepare quote reply
+                String quote = "It always seems impossible until it's done.";
+                byte[] replyData = quote.getBytes();
+
+                // 4. Send UDP reply to client
+                DatagramPacket reply = new DatagramPacket(
+                    replyData,
+                    replyData.length,
+                    request.getAddress(),
+                    request.getPort()
+                );
+                socket.send(reply);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
